@@ -60,7 +60,7 @@ api:
         format: "Client %s connected to API with IP %s"
         args: ["client_info.c_str()", "client_address.c_str()"]
 
-#WiFi Settings
+#WiFi Settings (use your wifi settings or better use a Secrets in ESPhome)
 wifi:
   ssid: !secret SSID
   password: !secret SSID_Pass
