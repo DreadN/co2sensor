@@ -1,0 +1,305 @@
+#Yaml for ESPhome senseair and a Wemos D32 with integrated SSD1306 OLED display
+#Functionalities:
+#- Senseair CO2 realtime reads [sensor]
+#- Median outlier removal [sensor copy]
+#- Filter out of zero value at start
+#- Low contrast to avoid burning display
+#- anti burn-in pixel shift
+#
+#Currently compatible & tested with ESPhome device Builder 2025.2
+# 
+#Modified starting yaml: https://github.com/alufers/co2-sensor-esphome/blob/master/co2-sensor.yaml
+#
+
+#BoardType and Basics
+esphome:
+  name: wemosoled
+  platformio_options:
+    upload_speed: 115200
+
+esp32:
+  board: lolin_d32
+  framework:
+    type: esp-idf
+    version: recommended
+    
+#For Integrated Wemos OLED
+i2c:
+  sda: 5
+  scl: 4
+    
+#WARNING: do not cable senseair in wrong way!
+#Putting +5V on wrong PIN will fry it, color the +5V pin with some (RED) nail polish
+#Check also RX/TX they need to be crossed (ESP32 Rx to Senseair Tx, ESP32 Tx to Senseair Rx)
+
+#For Senseair S8 serial
+uart:
+  #orange to TX
+  rx_pin: 3
+  #yellow to RX
+  tx_pin: 1
+  baud_rate: 9600
+  id: "co2_uart"
+# If you don't want mqtt, you can replace this with the native esphome api: https://esphome.io/components/api.html
+ 
+ 
+# Remove this if you don't want to use the WS2812 LED
+#light:
+#  - platform: esp32_rmt_led_strip
+#    rgb_order: RGB
+#    pin: 36
+#    num_leds: 1
+#    rmt_channel: 0
+#    chipset: ws2812
+#    name: "Top light"
+
+# Enable Home Assistant API
+api:
+  on_client_connected:
+    - logger.log:
+        format: "Client %s connected to API with IP %s"
+        args: ["client_info.c_str()", "client_address.c_str()"]
+
+#WiFi Settings
+wifi:
+  ssid: !secret SSID
+  password: !secret SSID_Pass
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "S2Mini Fallback Hotspot"
+    password: "XsWqchiHyXlx"
+
+#OTA Phase
+ota:
+  platform: esphome
+
+  on_begin:
+    then:
+      - display.page.show: ota_page
+      - component.update: my_display
+
+  on_progress:
+    then:
+      - lambda: |-
+          id(ota_progress) = x;
+      - component.update: my_display
+
+#Miscellaneous
+logger:
+  level: ERROR # disables annoying warnings from the display component
+
+captive_portal:
+
+web_server:
+  port: 80
+
+#Sensors:
+#Main CO2 Sensor from senseair UART
+sensor:
+  - platform: senseair
+    id: senseair_comp
+    update_interval: 30s
+    uart_id: "co2_uart"    
+    co2:
+      id: co2
+      name: "SenseAir CO2 Value"
+      filters:
+          #filter out zero CO2
+          - filter_out: 0
+
+    
+#Creates a copy of main sensor to filter out outlier values
+  - platform: copy
+    source_id: co2
+    name: "SenseAir CO2 Median 5 Values"
+    id: co2_median
+    filters:
+        # finds the median value of last six realtime reads
+        # first value sent after 1' 30"
+        - median:
+            window_size: 6
+            send_every: 6
+            send_first_at: 3   
+        #filter out zero CO2
+        - filter_out: 0
+    
+#some mixed text sensors for startup diagnostics
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+      id: esp_ip
+    ssid:
+      name: ESP Connected SSID
+      id: esp_ssid 
+
+#Button (TbV)
+button:
+  - platform: template
+    name: "Calibrate CO2"
+    on_press:
+      - senseair.background_calibration: senseair_comp
+
+#Fonts:
+#Reduced glyphs compiles better and takes less RAM
+font:
+  - file: "gfonts://Roboto"
+    id: roboto_small
+    size: 10
+    glyphs: 
+        '!"%()+=,-_.:°/?0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
+  - file: "gfonts://Roboto"
+    id: roboto_xs
+    size: 8
+    glyphs: 
+        '!"%()+=,-_.:°/?0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
+  - file: "fonts/calibri.ttf"
+    id: calibri
+    size: 16
+    glyphs: 
+        '!"%()+=,-_.:°/?0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz₂'
+
+#Graphs:
+graph:
+  - id: co2_graph_1h
+    duration: 1h
+    # display size: 128x64
+    # graph height to accomodate labels (half overlapped) and CO2 value
+    width: 128
+    height: 44
+    x_grid: 15min
+    border: false
+    traces:
+      - sensor: co2
+        line_thickness: 1
+        line_type: DOTTED
+        continuous: true
+      - sensor: co2_median
+        line_thickness: 2
+        line_type: SOLID
+        continuous: true
+  - id: co2_graph_6h
+    duration: 6h
+    # display size: 128x64
+    # graph height to accomodate labels (half overlapped) and CO2 value
+    width: 128
+    height: 44
+    x_grid: 1h
+    border: false
+    traces:
+      - sensor: co2
+        line_thickness: 1
+        line_type: DOTTED
+        continuous: true
+      - sensor: co2_median
+        line_thickness: 2
+        line_type: SOLID
+        continuous: true
+
+#Variables:
+globals:
+  - id: anti_burn_in
+    type: uint32_t
+    restore_value: no
+    initial_value: "0"
+  - id: boot_screen_time
+    type: uint32_t
+    restore_value: no
+    initial_value: "0"
+  - id: ota_progress
+    type: float
+    restore_value: no
+    initial_value: "0"
+
+#------------------------- Main Cycle ----------------------------
+#-----------------------------------------------------------------
+interval:
+  - interval: 60s
+    then:
+      - lambda: |-
+          id(anti_burn_in)++;
+      - component.update: my_display
+  - interval: 1s
+    then:
+      - lambda: |-
+          if(id(boot_screen_time) < 15) {
+            id(boot_screen_time)++;
+          } else {
+            id(my_display)->show_page(id(main_page));
+          }
+      - component.update: my_display
+
+#------------------------ Display Mgmt ---------------------------
+#-----------------------------------------------------------------
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    #reset_pin: 37
+    address: 0x3C
+    #lower brightness
+    contrast: 40%
+    id: my_display    
+    rotation: 180
+    
+    # display size: 128x64
+    pages:
+
+      #boot
+      - id: boot_page
+        lambda: |-
+          it.printf(128/2, 4, id(calibri), COLOR_ON, TextAlign::TOP_CENTER, "CO2");
+          it.printf(128/2, 4+12, id(calibri), COLOR_ON, TextAlign::TOP_CENTER, "Sensor");
+          if(id(esp_ssid).state.length() > 0) {
+
+          it.printf(128/2, 4+12+15, id(roboto_small), COLOR_ON, TextAlign::TOP_CENTER, id(esp_ssid).state.c_str());
+          it.printf(128/2, 4+12+15+12, id(roboto_small), COLOR_ON, TextAlign::TOP_CENTER, id(esp_ip).state.c_str());
+          } else {
+            const char *txt = "";
+            switch(id(anti_burn_in) % 3) {
+              case 0:
+                txt = ".";
+                break;
+              case 1:
+                txt = "..";
+                break;
+              case 2:
+                txt = "...";
+                break;
+            }
+            it.printf(128/2, 4+12+15, id(roboto_small), COLOR_ON, TextAlign::TOP_CENTER, txt);
+          }
+
+      #main CO2 graph & data
+      - id: main_page 
+        lambda: |-
+          // x offset from 0 to 7 and return to 0
+          int32_t x_offset = id(anti_burn_in) & 0b00111;
+          int32_t y_offset = 0;
+
+          // flips every 2 updates
+          int32_t should_flip = id(anti_burn_in) & 0b00010;
+          
+          if(should_flip) {
+              it.printf(128/4*0 + 3 + x_offset, 56, id(roboto_xs), COLOR_ON, TextAlign::LEFT, "-1h");
+              it.printf(128/4*2 + 3 + x_offset, 56, id(roboto_xs), COLOR_ON, TextAlign::LEFT, "-30m");
+              it.printf(128/2 + x_offset - 3, 0 + y_offset, id(calibri), COLOR_ON, TextAlign::TOP_CENTER, "CO₂ %.0f ppm", id(co2).state);
+              it.graph(0 + x_offset, 16, id(co2_graph_1h)); 
+          } else {
+              // on ELSE
+              // draw x-axis labels on TOP
+              it.printf(128/4*0 + 3 + x_offset, 0, id(roboto_xs), COLOR_ON, TextAlign::LEFT, "-6h");
+              it.printf(128/4*2 + 3 + x_offset, 0, id(roboto_xs), COLOR_ON, TextAlign::LEFT, "-3h");
+              // draw value on BOTTOM
+              it.printf(128/2 + x_offset - 3, 64 + y_offset, id(calibri), COLOR_ON, TextAlign::BOTTOM_CENTER, "CO₂ %.0f ppm", id(co2).state);
+              // draw graph on 6h timeframe
+              it.graph(0 + x_offset, 4, id(co2_graph_6h)); 
+          }
+      # ^^^^^^ main anti burn_in check, if yes flips graph
+
+      #ota page
+      - id: ota_page
+        lambda: |-
+          it.printf(128/2, 4, id(calibri), COLOR_ON, TextAlign::TOP_CENTER, "OTA");
+          it.printf(128/2, 4+16, id(calibri), COLOR_ON, TextAlign::TOP_CENTER, "...");
+          it.printf(128/2, 4+16+16, id(calibri), COLOR_ON, TextAlign::TOP_CENTER, "%.0f%%", id(ota_progress));
