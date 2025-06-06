@@ -67,4 +67,5 @@ See image below for better clarity.
 
 ## Final Assembly
 ![image](https://github.com/user-attachments/assets/9f67c6c6-6477-4c82-8a06-a96097f0c152)
+![image](https://github.com/user-attachments/assets/36c3a4c3-f153-42c6-966b-a2f49860d342)
 
