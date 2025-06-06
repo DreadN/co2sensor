@@ -5,7 +5,7 @@ Compact and versatile, it can be integrated in home assistant via ESPhome addon 
 ## ESP32 YAML File:
 https://github.com/DreadN/co2sensor/blob/main/wemosoled.yaml
 
-## STL files to print Case, cover and sensor internal locker
+## STL files to print Case, cover and sensor internal lock
 https://www.printables.com/model/1319180-compact-co2-sensor-with-oled-display
 
 ## Building components:
