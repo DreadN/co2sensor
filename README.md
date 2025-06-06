@@ -2,18 +2,17 @@
 This is a little sensor to do one thing, measuring carbon dioxide (CO₂).
 Compact and versatile, it can be integrated in home assistant via ESPhome addon or it can be used as standalone sensor with the integrated OLED display.
 
-Home Assistant integration:
-![image](https://github.com/user-attachments/assets/cd0deb60-f2c0-48a8-9633-71669b5ef117)
+These are output from Home assistant and standalone sensor use.
 
-Standalone Display
+![image](https://github.com/user-attachments/assets/cd0deb60-f2c0-48a8-9633-71669b5ef117)
 ![image](https://github.com/user-attachments/assets/197fe93d-e885-47ad-9ec9-5b6cf75c0da1)
 
-[!IMPORTANT]
-## ESP32 YAML File:
-https://github.com/DreadN/co2sensor/blob/main/wemosoled.yaml
-
-## STL files to print Case, cover and sensor internal lock
-https://www.printables.com/model/1319180-compact-co2-sensor-with-oled-display
+>[!IMPORTANT]
+>## ESP32 YAML File:
+>https://github.com/DreadN/co2sensor/blob/main/wemosoled.yaml
+>
+>## STL files to print Case, cover and sensor internal lock
+>https://www.printables.com/model/1319180-compact-co2-sensor-with-oled-display
 
 ## Building components:
 Heres the shopping cart of things you will need.
@@ -38,9 +37,9 @@ Heres the shopping cart of things you will need.
 - Allen Key for M3 screws
 - Clippers and cutters for electronics
 
-[!CAUTION]
-# Senseair important notes:
-Before starting to solder and connect wires it's important to consider these three notes.
+>[!CAUTION]
+># Senseair important notes:
+>Before starting to solder and connect wires it's important to consider these three notes.
 
 1. The sensor has no power inversion protection, so after installing the two pin male connectors on the Senseair, the first thing to do is take a red nail polish and mark the 5V DC pin to avoid inverting +/- power connections. Power inversion will fry the sensor and 25€ will go into the trashcan.
     ![image](https://github.com/user-attachments/assets/74b9426b-9bd1-4497-9c15-85780cb7b134)
@@ -61,7 +60,7 @@ All on the same side to better route cables in the sensor container.
 - GND pin
 - 5V pin
 See image below for better clarity.
-[!TIP]
-Unless you want a steampunk version of the sensor 😀 you should solder cables exiting on the opposite side of the OLED screen.
+>[!TIP]
+>Unless you want a steampunk version of the sensor 😀 you should solder cables exiting on the opposite side of the OLED screen.
  
 ![image](https://github.com/user-attachments/assets/b7f072cb-ede2-422c-9b27-583f4704a5c2)
