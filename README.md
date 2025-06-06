@@ -64,3 +64,7 @@ See image below for better clarity.
 >Unless you want a steampunk version of the sensor 😀 you should solder cables exiting on the opposite side of the OLED screen.
  
 ![image](https://github.com/user-attachments/assets/b7f072cb-ede2-422c-9b27-583f4704a5c2)
+
+## Final Assembly
+![image](https://github.com/user-attachments/assets/9f67c6c6-6477-4c82-8a06-a96097f0c152)
+
