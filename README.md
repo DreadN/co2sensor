@@ -11,21 +11,20 @@ https://www.printables.com/model/1319180-compact-co2-sensor-with-oled-display
 ## Building components:
 Heres the shopping cart of things you will need.
 
-- Senseair S8-4B - Aliexpress
-- Wemos OLED ESP32 - Aliexpress
+- Senseair S8-4B - [Aliexpress](https://it.aliexpress.com/item/1005002961668404.html?spm=a2g0o.productlist.main.1.595d10edwR3ObB&algo_pvid=44fbad28-745e-4e0e-90b8-7248146a09d8&algo_exp_id=44fbad28-745e-4e0e-90b8-7248146a09d8-0&pdp_ext_f=%7B%22order%22%3A%227%22%2C%22eval%22%3A%221%22%7D&pdp_npi=4%40dis%21EUR%2126.30%2124.79%21%21%2129.33%2127.65%21%402103856417491526812864680e0788%2112000022975722048%21sea%21IT%214060411391%21X&curPageLogUid=Ww6AxBZZRw9D&utparam-url=scene%3Asearch%7Cquery_from%3A)
+- Wemos OLED ESP32 - [Aliexpress](https://it.aliexpress.com/item/1005006216570195.html?spm=a2g0o.productlist.main.6.24c83be7Ty90pz&algo_pvid=453d590f-517b-4825-adaf-4b72fde40c77&algo_exp_id=453d590f-517b-4825-adaf-4b72fde40c77-5&pdp_ext_f=%7B%22order%22%3A%224%22%2C%22eval%22%3A%221%22%7D&pdp_npi=4%40dis%21EUR%216.45%216.45%21%21%217.19%217.19%21%402103956b17491569386441748ecd7a%2112000038604869263%21sea%21IT%214060411391%21X&curPageLogUid=hGldiXjtyOav&utparam-url=scene%3Asearch%7Cquery_from%3A)
 - 4x standard Brass Inserts
 - 4x M3x40mm screws, cylindrical head
 - Micro USB 5W cable (those used to charge old Smartphones)
 - Two 2-pin male connector from a PCB pin strip (those coming with ESP32 are ok)
 - A floppy disk M3x4 screw and a small o-ring (id 3.5, cs 1) to fix the sensor
-- 100mm dupont wire cables - Aliexpress
+- 100mm dupont wire cables - [Aliexpress](https://it.aliexpress.com/item/1005006050213130.html?spm=a2g0o.order_list.order_list_main.24.3f0d3696vC5eVG&gatewayAdapt=glo2ita)
    - one red for 5V out
    - one black for GND
    - some bright colors for UART (used yellow/orange)
    - optional two cables for Senseair calibration (I used two dupont F connector and a created a male jumper)
     ![image](https://github.com/user-attachments/assets/e499864b-d731-47f4-9980-1e78b6d4d0ac)
 
- 
 
 ## Additional tools:
 - Soldering station
