@@ -2,6 +2,13 @@
 This is a little sensor to do one thing, measuring carbon dioxide (CO₂).
 Compact and versatile, it can be integrated in home assistant via ESPhome addon or it can be used as standalone sensor with the integrated OLED display.
 
+Home Assistant integration:
+![image](https://github.com/user-attachments/assets/cd0deb60-f2c0-48a8-9633-71669b5ef117)
+
+Standalone Display
+![image](https://github.com/user-attachments/assets/197fe93d-e885-47ad-9ec9-5b6cf75c0da1)
+
+
 ## ESP32 YAML File:
 https://github.com/DreadN/co2sensor/blob/main/wemosoled.yaml
 
