@@ -8,7 +8,7 @@ Home Assistant integration:
 Standalone Display
 ![image](https://github.com/user-attachments/assets/197fe93d-e885-47ad-9ec9-5b6cf75c0da1)
 
-
+[!IMPORTANT]
 ## ESP32 YAML File:
 https://github.com/DreadN/co2sensor/blob/main/wemosoled.yaml
 
@@ -38,8 +38,7 @@ Heres the shopping cart of things you will need.
 - Allen Key for M3 screws
 - Clippers and cutters for electronics
 
-# ------------------ WARNING ------------------ Read Below before start connecting things ------------------ WARNING ------------------
-
+[!CAUTION]
 # Senseair important notes:
 Before starting to solder and connect wires it's important to consider these three notes.
 
@@ -62,6 +61,7 @@ All on the same side to better route cables in the sensor container.
 - GND pin
 - 5V pin
 See image below for better clarity.
-Note: Unless you want a steampunk version of the sensor 😀 you should solder cables exiting on the opposite side of the OLED screen.
+[!TIP]
+Unless you want a steampunk version of the sensor 😀 you should solder cables exiting on the opposite side of the OLED screen.
  
 ![image](https://github.com/user-attachments/assets/b7f072cb-ede2-422c-9b27-583f4704a5c2)
