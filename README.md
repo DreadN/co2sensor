@@ -65,6 +65,9 @@ See image below for better clarity.
  
 ![image](https://github.com/user-attachments/assets/b7f072cb-ede2-422c-9b27-583f4704a5c2)
 
+## Senseair S8-4B Specifications
+https://www.driesen-kern.de/downloads/senseairs84b00400024co2sensors80040dk.pdf
+
 ## Final Assembly
 ![image](https://github.com/user-attachments/assets/9f67c6c6-6477-4c82-8a06-a96097f0c152)
 ![image](https://github.com/user-attachments/assets/36c3a4c3-f153-42c6-966b-a2f49860d342)
